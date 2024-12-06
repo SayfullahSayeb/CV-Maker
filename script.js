@@ -121,28 +121,54 @@ const addProject = () => {
     if (newEntry) container.appendChild(newEntry);
 };
 
+// Check if form has required fields filled
+function isFormValid() {
+    const requiredFields = [
+        'fullName',
+        'jobTitle',
+        'email',
+        'phone',
+        'location',
+        'summary'
+    ];
+
+    let isValid = true;
+    let emptyFields = [];
+
+    requiredFields.forEach(field => {
+        const element = document.getElementById(field);
+        if (!element.value.trim()) {
+            isValid = false;
+            emptyFields.push(element.previousElementSibling.textContent.replace(' *', ''));
+        }
+    });
+
+    return { isValid, emptyFields };
+}
+
 // CV Preview and Download
 const generateCV = () => {
-    if (!validateForm()) {
-        alert('Please fill in all required fields correctly.');
+    const { isValid } = isFormValid();
+    if (!isValid) {
         return null;
     }
 
     const cv = document.createElement('div');
-    cv.className = 'cv-preview';
-
-    // Personal Information
+    cv.className = 'cv-document';
+    
+    // Personal Information Section
     const personalInfo = document.createElement('section');
+    personalInfo.className = 'cv-section personal-info';
     personalInfo.innerHTML = `
         <h1>${document.getElementById('fullName').value}</h1>
         <h2>${document.getElementById('jobTitle').value}</h2>
         <div class="contact-info">
-            <p>📧 ${document.getElementById('email').value}</p>
-            <p>📱 ${document.getElementById('phone').value}</p>
-            <p>📍 ${document.getElementById('location').value}</p>
-            ${document.getElementById('portfolio').value ? `<p>🌐 <a href="${document.getElementById('portfolio').value}" target="_blank">Portfolio</a></p>` : ''}
-            ${document.getElementById('linkedin').value ? `<p>💼 <a href="${document.getElementById('linkedin').value}" target="_blank">LinkedIn</a></p>` : ''}
-            ${document.getElementById('github').value ? `<p>💻 <a href="${document.getElementById('github').value}" target="_blank">GitHub</a></p>` : ''}
+            <p><strong>Email:</strong> ${document.getElementById('email').value}</p>
+            <p><strong>Phone:</strong> ${document.getElementById('phone').value}</p>
+            <p><strong>Location:</strong> ${document.getElementById('location').value}</p>
+            ${document.getElementById('portfolio').value ? `<p><strong>Portfolio:</strong> ${document.getElementById('portfolio').value}</p>` : ''}
+            ${document.getElementById('linkedin').value ? `<p><strong>LinkedIn:</strong> ${document.getElementById('linkedin').value}</p>` : ''}
+            ${document.getElementById('github').value ? `<p><strong>GitHub:</strong> ${document.getElementById('github').value}</p>` : ''}
         </div>
         <div class="summary">
             <p>${document.getElementById('summary').value}</p>
@@ -152,6 +178,7 @@ const generateCV = () => {
 
     // Work Experience
     const experience = document.createElement('section');
+    experience.className = 'cv-section experience';
     experience.innerHTML = '<h3>Work Experience</h3>';
     document.querySelectorAll('#experience-list .entry').forEach(entry => {
         experience.innerHTML += `
@@ -167,6 +194,7 @@ const generateCV = () => {
 
     // Education
     const education = document.createElement('section');
+    education.className = 'cv-section education';
     education.innerHTML = '<h3>Education</h3>';
     document.querySelectorAll('#education-list .entry').forEach(entry => {
         education.innerHTML += `
@@ -182,6 +210,7 @@ const generateCV = () => {
 
     // Skills
     const skills = document.createElement('section');
+    skills.className = 'cv-section skills';
     skills.innerHTML = '<h3>Skills</h3>';
     document.querySelectorAll('#skills-list .entry').forEach(entry => {
         skills.innerHTML += `
@@ -195,6 +224,7 @@ const generateCV = () => {
 
     // Languages
     const languages = document.createElement('section');
+    languages.className = 'cv-section languages';
     languages.innerHTML = '<h3>Languages</h3>';
     document.querySelectorAll('#languages-list .entry').forEach(entry => {
         languages.innerHTML += `
@@ -207,6 +237,7 @@ const generateCV = () => {
 
     // Certifications
     const certifications = document.createElement('section');
+    certifications.className = 'cv-section certifications';
     certifications.innerHTML = '<h3>Certifications</h3>';
     document.querySelectorAll('#certifications-list .entry').forEach(entry => {
         certifications.innerHTML += `
@@ -221,6 +252,7 @@ const generateCV = () => {
 
     // Projects
     const projects = document.createElement('section');
+    projects.className = 'cv-section projects';
     projects.innerHTML = '<h3>Projects</h3>';
     document.querySelectorAll('#projects-list .entry').forEach(entry => {
         projects.innerHTML += `
@@ -237,65 +269,202 @@ const generateCV = () => {
     return cv;
 };
 
-const previewCV = () => {
-    const cv = generateCV();
-    if (!cv) return;
-
-    const previewModal = document.getElementById('preview-modal');
-    const previewContent = document.getElementById('cv-preview');
+// Preview CV function
+function previewCV() {
+    const { isValid, emptyFields } = isFormValid();
     
-    previewContent.innerHTML = '';
-    previewContent.appendChild(cv);
-    previewModal.style.display = 'block';
-};
-
-const closePreview = () => {
-    document.getElementById('preview-modal').style.display = 'none';
-};
-
-const downloadCV = async () => {
-    const cv = generateCV();
-    if (!cv) return;
-
-    const element = cv.cloneNode(true);
-    const opt = {
-        margin: 1,
-        filename: `${document.getElementById('fullName').value.replace(/\s+/g, '_')}_CV.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
+    if (!isValid) {
+        showNotification(
+            `Please fill in the required fields: ${emptyFields.join(', ')}`,
+            'warning',
+            5000
+        );
+        return;
+    }
 
     try {
-        await html2pdf().set(opt).from(element).save();
-    } catch (error) {
-        console.error('Error generating PDF:', error);
-        alert('There was an error generating your PDF. Please try again.');
-    }
-};
-
-const clearForm = () => {
-    if (confirm('Are you sure you want to clear all form data? This cannot be undone.')) {
-        document.getElementById('cv-form').reset();
-        localStorage.removeItem('cvFormData');
+        const modal = document.getElementById('preview-modal');
+        const preview = document.getElementById('cv-preview');
         
-        // Clear all dynamic entries except the first one in each section
-        ['experience-list', 'education-list', 'skills-list', 'languages-list', 'certifications-list', 'projects-list'].forEach(id => {
-            const container = document.getElementById(id);
-            const entries = container.querySelectorAll('.entry');
-            entries.forEach((entry, index) => {
-                if (index > 0) entry.remove();
-            });
-            // Clear the first entry's fields
-            const firstEntry = container.querySelector('.entry');
-            if (firstEntry) {
-                firstEntry.querySelectorAll('input, select, textarea').forEach(input => {
-                    input.value = '';
-                });
-            }
-        });
+        // Generate CV content
+        preview.innerHTML = '';
+        preview.appendChild(generateCV());
+        modal.style.display = 'block';
+        
+        showNotification('CV preview generated successfully', 'success');
+    } catch (error) {
+        showNotification('Error generating CV preview. Please try again.', 'error');
     }
-};
+}
+
+// Download CV function
+async function downloadCV() {
+    const { isValid, emptyFields } = isFormValid();
+    
+    if (!isValid) {
+        showNotification(
+            `Please fill in the required fields: ${emptyFields.join(', ')}`,
+            'warning',
+            5000
+        );
+        return;
+    }
+
+    try {
+        showNotification('Preparing your CV for download...', 'info');
+        
+        const content = document.getElementById('cv-preview');
+        content.innerHTML = '';
+        content.appendChild(generateCV());
+        
+        const opt = {
+            margin: 10,
+            filename: `${document.getElementById('fullName').value.trim()}_CV.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        await html2pdf().set(opt).from(content).save();
+        
+        showNotification('CV downloaded successfully!', 'success');
+    } catch (error) {
+        showNotification('Error downloading CV. Please try again.', 'error');
+        console.error(error); // For debugging purposes
+    }
+}
+
+// Notification System
+function showNotification(message, type = 'info', duration = 3000) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    // Create notification content
+    let icon = '';
+    switch(type) {
+        case 'success':
+            icon = '✓';
+            break;
+        case 'error':
+            icon = '✕';
+            break;
+        case 'warning':
+            icon = '⚠';
+            break;
+        default:
+            icon = 'ℹ';
+    }
+
+    notification.innerHTML = `
+        <span class="notification-icon">${icon}</span>
+        <span class="notification-message">${message}</span>
+        <button class="notification-close" onclick="this.parentElement.remove()">✕</button>
+        <div class="notification-progress">
+            <div class="notification-progress-bar"></div>
+        </div>
+    `;
+
+    // Add to document
+    document.body.appendChild(notification);
+
+    // Show notification
+    setTimeout(() => notification.classList.add('show'), 10);
+
+    // Animate progress bar
+    const progressBar = notification.querySelector('.notification-progress-bar');
+    progressBar.style.width = '100%';
+    setTimeout(() => {
+        progressBar.style.width = '0%';
+    }, 10);
+
+    // Remove notification after duration
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, duration);
+}
+
+const closePreview = () => {
+    const modal = document.getElementById('preview-modal');
+    modal.style.display = 'none';
+}
+
+// Custom Confirm Dialog
+function showConfirmDialog(title, message, onConfirm) {
+    // Create dialog element
+    const dialog = document.createElement('div');
+    dialog.className = 'confirm-dialog';
+    
+    dialog.innerHTML = `
+        <div class="confirm-dialog-content">
+            <div class="confirm-dialog-header">
+                <h3 class="confirm-dialog-title">${title}</h3>
+            </div>
+            <div class="confirm-dialog-message">${message}</div>
+            <div class="confirm-dialog-actions">
+                <button class="confirm-dialog-btn cancel">Cancel</button>
+                <button class="confirm-dialog-btn confirm">Confirm</button>
+            </div>
+        </div>
+    `;
+
+    // Add to document
+    document.body.appendChild(dialog);
+
+    // Show dialog with animation
+    setTimeout(() => dialog.classList.add('show'), 10);
+
+    // Handle button clicks
+    const cancelBtn = dialog.querySelector('.cancel');
+    const confirmBtn = dialog.querySelector('.confirm');
+
+    cancelBtn.addEventListener('click', () => {
+        dialog.classList.remove('show');
+        setTimeout(() => dialog.remove(), 300);
+    });
+
+    confirmBtn.addEventListener('click', () => {
+        dialog.classList.remove('show');
+        setTimeout(() => {
+            dialog.remove();
+            onConfirm();
+        }, 300);
+    });
+}
+
+function clearForm() {
+    showConfirmDialog(
+        'Clear Form',
+        'Are you sure you want to clear all form data? This action cannot be undone.',
+        () => {
+            try {
+                document.getElementById('cv-form').reset();
+                localStorage.removeItem('cvFormData');
+                
+                // Clear all dynamic entries except the first one in each section
+                ['experience-list', 'education-list', 'skills-list', 'languages-list', 'certifications-list', 'projects-list'].forEach(id => {
+                    const container = document.getElementById(id);
+                    const entries = container.querySelectorAll('.entry');
+                    entries.forEach((entry, index) => {
+                        if (index > 0) entry.remove();
+                    });
+                    // Clear the first entry's fields
+                    const firstEntry = container.querySelector('.entry');
+                    if (firstEntry) {
+                        firstEntry.querySelectorAll('input, select, textarea').forEach(input => {
+                            input.value = '';
+                        });
+                    }
+                });
+                
+                showNotification('Form cleared successfully', 'success');
+            } catch (error) {
+                showNotification('Error clearing form: ' + error.message, 'error');
+            }
+        }
+    );
+}
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
