@@ -1,17 +1,3 @@
-// Theme Management
-const initTheme = () => {
-    const darkMode = localStorage.getItem('darkMode') === 'true';
-    document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    document.getElementById('theme-toggle').textContent = darkMode ? '☀️' : '🌙';
-};
-
-const toggleDarkMode = () => {
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
-    localStorage.setItem('darkMode', !isDark);
-};
-
 // Form Data Management
 const saveFormData = () => {
     const formData = {};
@@ -120,6 +106,44 @@ const addProject = () => {
     const newEntry = createEntry('projects-list');
     if (newEntry) container.appendChild(newEntry);
 };
+
+// Function to add delete button to entries (except required fields)
+function addDeleteButton(entry, listId) {
+    // List of required sections that shouldn't have delete buttons
+    const requiredSections = ['fullName', 'jobTitle', 'email', 'phone', 'location', 'summary'];
+    
+    // Check if this entry is in a required section
+    if (requiredSections.includes(listId)) {
+        return; // Don't add delete button to required fields
+    }
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.innerHTML = '❌';
+    deleteBtn.title = 'Delete entry';
+    deleteBtn.onclick = () => {
+        showCustomConfirm(
+            'Delete Entry',
+            'Are you sure you want to delete this entry?',
+            () => {
+                entry.remove();
+                showNotification('Entry deleted successfully', 'success');
+            }
+        );
+    };
+    entry.appendChild(deleteBtn);
+}
+
+// Function to create new entry
+function createEntry(listId, data = null) {
+    const entry = document.createElement('div');
+    entry.className = 'entry';
+    
+    // Add delete button (if not a required field)
+    addDeleteButton(entry, listId);
+    
+    return entry;
+}
 
 // Check if form has required fields filled
 function isFormValid() {
@@ -468,7 +492,6 @@ function clearForm() {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    initTheme();
     loadFormData();
 
     // Auto-save form data

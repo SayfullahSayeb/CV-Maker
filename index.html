@@ -12,7 +12,6 @@
     <div class="header">
         <h1>Professional CV Generator</h1>
         <div class="header-actions">
-            <button id="theme-toggle" onclick="toggleDarkMode()" class="icon-btn" title="Toggle Dark Mode">🌙</button>
             <button onclick="previewCV()" class="primary-btn">Preview CV</button>
             <button onclick="downloadCV()" class="primary-btn">Download PDF</button>
             <button onclick="clearForm()" class="secondary-btn">Clear Form</button>
@@ -26,23 +25,23 @@
                 <h2>Personal Information</h2>
                 <div class="form-grid">
                     <div class="form-group w-60">
-                        <label for="fullName">Full Name *</label>
+                        <label for="fullName">Full Name <span class="asterisk">*</span></label>
                         <input type="text" id="fullName" required>
                     </div>
                     <div class="form-group w-60">
-                        <label for="jobTitle">Professional Title *</label>
+                        <label for="jobTitle">Professional Title <span class="asterisk">*</span></label>
                         <input type="text" id="jobTitle" required>
                     </div>
                     <div class="form-group w-50">
-                        <label for="email">Email *</label>
+                        <label for="email">Email <span class="asterisk">*</span></label>
                         <input type="email" id="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                     </div>
                     <div class="form-group w-40">
-                        <label for="phone">Phone *</label>
+                        <label for="phone">Phone <span class="asterisk">*</span></label>
                         <input type="tel" id="phone" required pattern="[0-9]{10,}">
                     </div>
                     <div class="form-group w-50">
-                        <label for="location">Location *</label>
+                        <label for="location">Location <span class="asterisk">*</span></label>
                         <input type="text" id="location" required>
                     </div>
                     <div class="form-group w-50">
@@ -59,7 +58,7 @@
                     </div>
                 </div>
                 <div class="form-group full-width">
-                    <label for="summary">Professional Summary *</label>
+                    <label for="summary">Professional Summary <span class="asterisk">*</span></label>
                     <textarea id="summary" rows="4" required></textarea>
                 </div>
             </div>
@@ -72,11 +71,11 @@
                         <button type="button" onclick="this.parentElement.remove()" class="remove-btn" title="Remove">×</button>
                         <div class="entry-grid">
                             <div class="form-group w-60">
-                                <label>Company Name *</label>
+                                <label>Company Name <span class="asterisk">*</span></label>
                                 <input type="text" class="company" required>
                             </div>
                             <div class="form-group w-60">
-                                <label>Position *</label>
+                                <label>Position <span class="asterisk">*</span></label>
                                 <input type="text" class="position" required>
                             </div>
                             <div class="form-group w-50">
@@ -84,7 +83,7 @@
                                 <input type="text" class="location">
                             </div>
                             <div class="form-group w-40">
-                                <label>Start Date *</label>
+                                <label>Start Date <span class="asterisk">*</span></label>
                                 <input type="text" class="start-date" required placeholder="MM/YYYY">
                             </div>
                             <div class="form-group w-40">
@@ -92,7 +91,7 @@
                                 <input type="text" class="end-date" placeholder="MM/YYYY or Present">
                             </div>
                             <div class="form-group full-width">
-                                <label>Description *</label>
+                                <label>Description <span class="asterisk">*</span></label>
                                 <textarea class="description" rows="3" required placeholder="• Use bullet points to describe your achievements&#10;• Focus on quantifiable results&#10;• Start with action verbs"></textarea>
                             </div>
                         </div>
@@ -109,15 +108,15 @@
                         <button type="button" onclick="this.parentElement.remove()" class="remove-btn" title="Remove">×</button>
                         <div class="entry-grid">
                             <div class="form-group w-60">
-                                <label>Institution *</label>
+                                <label>Institution <span class="asterisk">*</span></label>
                                 <input type="text" class="institution" required>
                             </div>
                             <div class="form-group w-60">
-                                <label>Degree *</label>
+                                <label>Degree <span class="asterisk">*</span></label>
                                 <input type="text" class="degree" required>
                             </div>
                             <div class="form-group w-50">
-                                <label>Field of Study *</label>
+                                <label>Field of Study <span class="asterisk">*</span></label>
                                 <input type="text" class="field" required>
                             </div>
                             <div class="form-group w-40">
@@ -125,7 +124,7 @@
                                 <input type="text" class="grade">
                             </div>
                             <div class="form-group w-40">
-                                <label>Start Date *</label>
+                                <label>Start Date <span class="asterisk">*</span></label>
                                 <input type="text" class="start-date" required placeholder="MM/YYYY">
                             </div>
                             <div class="form-group w-40">
@@ -146,11 +145,11 @@
                         <button type="button" onclick="this.parentElement.remove()" class="remove-btn" title="Remove">×</button>
                         <div class="entry-grid">
                             <div class="form-group w-60">
-                                <label>Skill Category *</label>
+                                <label>Skill Category <span class="asterisk">*</span></label>
                                 <input type="text" class="skill-category" required placeholder="e.g., Programming Languages, Tools, Soft Skills">
                             </div>
                             <div class="form-group full-width">
-                                <label>Skills *</label>
+                                <label>Skills <span class="asterisk">*</span></label>
                                 <input type="text" class="skill-list" required placeholder="e.g., JavaScript, React, Node.js">
                             </div>
                         </div>
@@ -167,11 +166,11 @@
                         <button type="button" onclick="this.parentElement.remove()" class="remove-btn" title="Remove">×</button>
                         <div class="entry-grid">
                             <div class="form-group w-50">
-                                <label>Language *</label>
+                                <label>Language <span class="asterisk">*</span></label>
                                 <input type="text" class="language" required>
                             </div>
                             <div class="form-group w-50">
-                                <label>Proficiency Level *</label>
+                                <label>Proficiency Level <span class="asterisk">*</span></label>
                                 <select class="proficiency" required>
                                     <option value="">Select Level</option>
                                     <option value="Native">Native</option>
@@ -195,15 +194,15 @@
                         <button type="button" onclick="this.parentElement.remove()" class="remove-btn" title="Remove">×</button>
                         <div class="entry-grid">
                             <div class="form-group w-60">
-                                <label>Certificate Name *</label>
+                                <label>Certificate Name <span class="asterisk">*</span></label>
                                 <input type="text" class="cert-name" required>
                             </div>
                             <div class="form-group w-60">
-                                <label>Issuing Organization *</label>
+                                <label>Issuing Organization <span class="asterisk">*</span></label>
                                 <input type="text" class="issuer" required>
                             </div>
                             <div class="form-group w-40">
-                                <label>Issue Date *</label>
+                                <label>Issue Date <span class="asterisk">*</span></label>
                                 <input type="text" class="cert-date" required placeholder="MM/YYYY">
                             </div>
                             <div class="form-group w-60">
@@ -224,11 +223,11 @@
                         <button type="button" onclick="this.parentElement.remove()" class="remove-btn" title="Remove">×</button>
                         <div class="entry-grid">
                             <div class="form-group w-60">
-                                <label>Project Name *</label>
+                                <label>Project Name <span class="asterisk">*</span></label>
                                 <input type="text" class="project-name" required>
                             </div>
                             <div class="form-group w-60">
-                                <label>Technologies Used *</label>
+                                <label>Technologies Used <span class="asterisk">*</span></label>
                                 <input type="text" class="technologies" required placeholder="e.g., React, Node.js, MongoDB">
                             </div>
                             <div class="form-group w-50">
@@ -236,7 +235,7 @@
                                 <input type="url" class="project-url" placeholder="https://...">
                             </div>
                             <div class="form-group full-width">
-                                <label>Description *</label>
+                                <label>Description <span class="asterisk">*</span></label>
                                 <textarea class="project-description" rows="3" required placeholder="• Describe the project's purpose&#10;• Highlight key features&#10;• Mention your role and impact"></textarea>
                             </div>
                         </div>
