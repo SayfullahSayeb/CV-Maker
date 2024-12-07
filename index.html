@@ -1,69 +1,277 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Maker</title>
+    <meta name="description" content="Professional CV Generator - Create your resume in minutes">
+    <title>Professional CV Generator</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>CV Maker</h1>
-            <div class="header-buttons">
-                <button id="toggleTheme"><i class="fas fa-moon"></i> Toggle Theme</button>
-                <button id="previewCV"><i class="fas fa-eye"></i> Preview</button>
-                <button id="downloadCV"><i class="fas fa-download"></i> Download</button>
-                <button id="clearCV"><i class="fas fa-trash"></i> Clear</button>
-            </div>
-        </header>
-        <main>
-            <form id="cvForm">
-                <section>
-                    <h2>Personal Information</h2>
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" name="location" required>
-                    </div>
-                </section>
-                <section>
-                    <h2>Professional Summary</h2>
-                    <div class="form-group">
-                        <textarea id="summary" name="summary" rows="4" required></textarea>
-                    </div>
-                </section>
-                <section id="experienceSection">
-                    <h2>Work Experience</h2>
-                    <div id="experienceList"></div>
-                    <button type="button" id="addExperience">Add Experience</button>
-                </section>
-                <section id="educationSection">
-                    <h2>Education</h2>
-                    <div id="educationList"></div>
-                    <button type="button" id="addEducation">Add Education</button>
-                </section>
-                <section id="skillsSection">
-                    <h2>Skills</h2>
-                    <div id="skillsList"></div>
-                    <button type="button" id="addSkill">Add Skill</button>
-                </section>
-                <button type="submit">Save CV</button>
-            </form>
-        </main>
+    <div class="header">
+        <h1>Professional CV Generator</h1>
+        <div class="header-actions">
+            <button onclick="previewCV()" class="primary-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                Preview
+            </button>
+            <button onclick="downloadCV()" class="primary-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download
+            </button>
+            <button onclick="clearForm()" class="secondary-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                Clear
+            </button>
+        </div>
     </div>
+
+    <div class="container">
+        <form id="cv-form" onsubmit="return false;">
+            <!-- Personal Information -->
+            <div class="section">
+                <h2>Personal Information</h2>
+                <div class="form-grid">
+                    <div class="form-group w-60">
+                        <label for="fullName">Full Name <span class="asterisk">*</span></label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group w-60">
+                        <label for="jobTitle">Professional Title <span class="asterisk">*</span></label>
+                        <input type="text" id="jobTitle" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label for="email">Email <span class="asterisk">*</span></label>
+                        <input type="email" id="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    </div>
+                    <div class="form-group w-40">
+                        <label for="phone">Phone <span class="asterisk">*</span></label>
+                        <input type="tel" id="phone" required pattern="[0-9]{10,}">
+                    </div>
+                    <div class="form-group w-50">
+                        <label for="location">Location <span class="asterisk">*</span></label>
+                        <input type="text" id="location" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label for="portfolio">Portfolio/Website</label>
+                        <input type="url" id="portfolio" placeholder="https://...">
+                    </div>
+                    <div class="form-group w-50">
+                        <label for="linkedin">LinkedIn</label>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="form-group w-50">
+                        <label for="github">GitHub</label>
+                        <input type="url" id="github" placeholder="https://github.com/...">
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="summary">Professional Summary <span class="asterisk">*</span></label>
+                    <textarea id="summary" rows="4" required></textarea>
+                </div>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="section">
+                <h2>Work Experience</h2>
+                <div id="experience-list">
+                    <div class="entry">
+                        <div class="entry-grid">
+                            <div class="form-group w-60">
+                                <label>Company Name <span class="asterisk">*</span></label>
+                                <input type="text" class="company" required>
+                            </div>
+                            <div class="form-group w-60">
+                                <label>Position <span class="asterisk">*</span></label>
+                                <input type="text" class="position" required>
+                            </div>
+                            <div class="form-group w-50">
+                                <label>Location</label>
+                                <input type="text" class="location">
+                            </div>
+                            <div class="form-group w-40">
+                                <label>Start Date <span class="asterisk">*</span></label>
+                                <input type="text" class="start-date" required placeholder="MM/YYYY">
+                            </div>
+                            <div class="form-group w-40">
+                                <label>End Date</label>
+                                <input type="text" class="end-date" placeholder="MM/YYYY or Present">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Description <span class="asterisk">*</span></label>
+                                <textarea class="description" rows="3" required placeholder="• Use bullet points to describe your achievements&#10;• Focus on quantifiable results&#10;• Start with action verbs"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addExperience()" class="add-btn">+ Add Work Experience</button>
+            </div>
+
+            <!-- Education -->
+            <div class="section">
+                <h2>Education</h2>
+                <div id="education-list">
+                    <div class="entry">
+                        <div class="entry-grid">
+                            <div class="form-group w-60">
+                                <label>Institution <span class="asterisk">*</span></label>
+                                <input type="text" class="institution" required>
+                            </div>
+                            <div class="form-group w-60">
+                                <label>Degree <span class="asterisk">*</span></label>
+                                <input type="text" class="degree" required>
+                            </div>
+                            <div class="form-group w-50">
+                                <label>Field of Study <span class="asterisk">*</span></label>
+                                <input type="text" class="field" required>
+                            </div>
+                            <div class="form-group w-40">
+                                <label>Grade/GPA</label>
+                                <input type="text" class="grade">
+                            </div>
+                            <div class="form-group w-40">
+                                <label>Start Date <span class="asterisk">*</span></label>
+                                <input type="text" class="start-date" required placeholder="MM/YYYY">
+                            </div>
+                            <div class="form-group w-40">
+                                <label>End Date</label>
+                                <input type="text" class="end-date" placeholder="MM/YYYY or Present">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addEducation()" class="add-btn">+ Add Education</button>
+            </div>
+
+            <!-- Skills -->
+            <div class="section">
+                <h2>Skills</h2>
+                <div id="skills-list">
+                    <div class="entry">
+                        <div class="entry-grid">
+                            <div class="form-group w-60">
+                                <label>Skill Category <span class="asterisk">*</span></label>
+                                <input type="text" class="skill-category" required placeholder="e.g., Programming Languages, Tools, Soft Skills">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Skills <span class="asterisk">*</span></label>
+                                <input type="text" class="skill-list" required placeholder="e.g., JavaScript, React, Node.js">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addSkill()" class="add-btn">+ Add Skill Category</button>
+            </div>
+
+            <!-- Languages -->
+            <div class="section">
+                <h2>Languages</h2>
+                <div id="languages-list">
+                    <div class="entry">
+                        <div class="entry-grid">
+                            <div class="form-group w-50">
+                                <label>Language <span class="asterisk">*</span></label>
+                                <input type="text" class="language" required>
+                            </div>
+                            <div class="form-group w-50">
+                                <label>Proficiency Level <span class="asterisk">*</span></label>
+                                <select class="proficiency" required>
+                                    <option value="">Select Level</option>
+                                    <option value="Native">Native</option>
+                                    <option value="Fluent">Fluent</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Basic">Basic</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addLanguage()" class="add-btn">+ Add Language</button>
+            </div>
+
+            <!-- Certifications -->
+            <div class="section">
+                <h2>Certifications</h2>
+                <div id="certifications-list">
+                    <div class="entry">
+                        <div class="entry-grid">
+                            <div class="form-group w-60">
+                                <label>Certificate Name <span class="asterisk">*</span></label>
+                                <input type="text" class="cert-name" required>
+                            </div>
+                            <div class="form-group w-60">
+                                <label>Issuing Organization <span class="asterisk">*</span></label>
+                                <input type="text" class="issuer" required>
+                            </div>
+                            <div class="form-group w-40">
+                                <label>Issue Date <span class="asterisk">*</span></label>
+                                <input type="text" class="cert-date" required placeholder="MM/YYYY">
+                            </div>
+                            <div class="form-group w-60">
+                                <label>Credential URL</label>
+                                <input type="url" class="cert-url" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addCertification()" class="add-btn">+ Add Certification</button>
+            </div>
+
+            <!-- Projects -->
+            <div class="section">
+                <h2>Projects</h2>
+                <div id="projects-list">
+                    <div class="entry">
+                        <div class="entry-grid">
+                            <div class="form-group w-60">
+                                <label>Project Name <span class="asterisk">*</span></label>
+                                <input type="text" class="project-name" required>
+                            </div>
+                            <div class="form-group w-60">
+                                <label>Technologies Used <span class="asterisk">*</span></label>
+                                <input type="text" class="technologies" required placeholder="e.g., React, Node.js, MongoDB">
+                            </div>
+                            <div class="form-group w-50">
+                                <label>Project URL</label>
+                                <input type="url" class="project-url" placeholder="https://...">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Description <span class="asterisk">*</span></label>
+                                <textarea class="project-description" rows="3" required placeholder="• Describe the project's purpose&#10;• Highlight key features&#10;• Mention your role and impact"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addProject()" class="add-btn">+ Add Project</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>CV Preview</h2>
+                <button onclick="closePreview()" class="close-btn" title="Close">×</button>
+            </div>
+            <div id="cv-preview"></div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
