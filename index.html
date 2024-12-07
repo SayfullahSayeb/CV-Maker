@@ -1,14 +1,69 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-    <script type="module" crossorigin src="/assets/index-CUdoCl6o.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Cjbdfg3T.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Maker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CV Maker</h1>
+            <div class="header-buttons">
+                <button id="toggleTheme"><i class="fas fa-moon"></i> Toggle Theme</button>
+                <button id="previewCV"><i class="fas fa-eye"></i> Preview</button>
+                <button id="downloadCV"><i class="fas fa-download"></i> Download</button>
+                <button id="clearCV"><i class="fas fa-trash"></i> Clear</button>
+            </div>
+        </header>
+        <main>
+            <form id="cvForm">
+                <section>
+                    <h2>Personal Information</h2>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" required>
+                    </div>
+                </section>
+                <section>
+                    <h2>Professional Summary</h2>
+                    <div class="form-group">
+                        <textarea id="summary" name="summary" rows="4" required></textarea>
+                    </div>
+                </section>
+                <section id="experienceSection">
+                    <h2>Work Experience</h2>
+                    <div id="experienceList"></div>
+                    <button type="button" id="addExperience">Add Experience</button>
+                </section>
+                <section id="educationSection">
+                    <h2>Education</h2>
+                    <div id="educationList"></div>
+                    <button type="button" id="addEducation">Add Education</button>
+                </section>
+                <section id="skillsSection">
+                    <h2>Skills</h2>
+                    <div id="skillsList"></div>
+                    <button type="button" id="addSkill">Add Skill</button>
+                </section>
+                <button type="submit">Save CV</button>
+            </form>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>
