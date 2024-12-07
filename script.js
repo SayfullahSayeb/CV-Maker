@@ -71,78 +71,195 @@ const createEntry = (templateId) => {
     return newEntry;
 };
 
-const addExperience = () => {
-    const container = document.getElementById('experience-list');
+function addExperience() {
+    const experienceList = document.getElementById('experience-list');
     const newEntry = createEntry('experience-list');
-    if (newEntry) container.appendChild(newEntry);
-};
-
-const addEducation = () => {
-    const container = document.getElementById('education-list');
-    const newEntry = createEntry('education-list');
-    if (newEntry) container.appendChild(newEntry);
-};
-
-const addSkill = () => {
-    const container = document.getElementById('skills-list');
-    const newEntry = createEntry('skills-list');
-    if (newEntry) container.appendChild(newEntry);
-};
-
-const addLanguage = () => {
-    const container = document.getElementById('languages-list');
-    const newEntry = createEntry('languages-list');
-    if (newEntry) container.appendChild(newEntry);
-};
-
-const addCertification = () => {
-    const container = document.getElementById('certifications-list');
-    const newEntry = createEntry('certifications-list');
-    if (newEntry) container.appendChild(newEntry);
-};
-
-const addProject = () => {
-    const container = document.getElementById('projects-list');
-    const newEntry = createEntry('projects-list');
-    if (newEntry) container.appendChild(newEntry);
-};
-
-// Function to add delete button to entries (except required fields)
-function addDeleteButton(entry, listId) {
-    // List of required sections that shouldn't have delete buttons
-    const requiredSections = ['fullName', 'jobTitle', 'email', 'phone', 'location', 'summary'];
-    
-    // Check if this entry is in a required section
-    if (requiredSections.includes(listId)) {
-        return; // Don't add delete button to required fields
+    if (newEntry) {
+        experienceList.appendChild(newEntry);
     }
+}
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.innerHTML = '❌';
-    deleteBtn.title = 'Delete entry';
-    deleteBtn.onclick = () => {
-        showCustomConfirm(
-            'Delete Entry',
-            'Are you sure you want to delete this entry?',
-            () => {
-                entry.remove();
-                showNotification('Entry deleted successfully', 'success');
-            }
-        );
-    };
-    entry.appendChild(deleteBtn);
+function addEducation() {
+    const educationList = document.getElementById('education-list');
+    const newEntry = createEntry('education-list');
+    if (newEntry) {
+        educationList.appendChild(newEntry);
+    }
+}
+
+function addSkills() {
+    const skillsList = document.getElementById('skills-list');
+    const newEntry = createEntry('skills-list');
+    if (newEntry) {
+        skillsList.appendChild(newEntry);
+    }
+}
+
+function addLanguages() {
+    const languagesList = document.getElementById('languages-list');
+    const newEntry = createEntry('languages-list');
+    if (newEntry) {
+        languagesList.appendChild(newEntry);
+    }
+}
+
+function addCertifications() {
+    const certificationsList = document.getElementById('certifications-list');
+    const newEntry = createEntry('certifications-list');
+    if (newEntry) {
+        certificationsList.appendChild(newEntry);
+    }
+}
+
+function addProjects() {
+    const projectsList = document.getElementById('projects-list');
+    const newEntry = createEntry('projects-list');
+    if (newEntry) {
+        projectsList.appendChild(newEntry);
+    }
 }
 
 // Function to create new entry
-function createEntry(listId, data = null) {
-    const entry = document.createElement('div');
-    entry.className = 'entry';
+function createEntry(listId) {
+    const templateMap = {
+        'experience-list': `
+            <div class="entry">
+                <div class="entry-grid">
+                    <div class="form-group w-60">
+                        <label>Company Name <span class="asterisk">*</span></label>
+                        <input type="text" class="company" required>
+                    </div>
+                    <div class="form-group w-60">
+                        <label>Position <span class="asterisk">*</span></label>
+                        <input type="text" class="position" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label>Location</label>
+                        <input type="text" class="location">
+                    </div>
+                    <div class="form-group w-40">
+                        <label>Start Date <span class="asterisk">*</span></label>
+                        <input type="text" class="start-date" required placeholder="MM/YYYY">
+                    </div>
+                    <div class="form-group w-40">
+                        <label>End Date</label>
+                        <input type="text" class="end-date" placeholder="MM/YYYY or Present">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description <span class="asterisk">*</span></label>
+                        <textarea class="description" rows="3" required placeholder="• Use bullet points to describe your achievements&#10;• Focus on quantifiable results&#10;• Start with action verbs"></textarea>
+                    </div>
+                </div>
+            </div>
+        `,
+        'education-list': `
+            <div class="entry">
+                <div class="entry-grid">
+                    <div class="form-group w-60">
+                        <label>Institution <span class="asterisk">*</span></label>
+                        <input type="text" class="institution" required>
+                    </div>
+                    <div class="form-group w-60">
+                        <label>Degree <span class="asterisk">*</span></label>
+                        <input type="text" class="degree" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label>Field of Study <span class="asterisk">*</span></label>
+                        <input type="text" class="field" required>
+                    </div>
+                    <div class="form-group w-40">
+                        <label>Grade/GPA</label>
+                        <input type="text" class="grade">
+                    </div>
+                    <div class="form-group w-40">
+                        <label>Start Date <span class="asterisk">*</span></label>
+                        <input type="text" class="start-date" required placeholder="MM/YYYY">
+                    </div>
+                    <div class="form-group w-40">
+                        <label>End Date</label>
+                        <input type="text" class="end-date" placeholder="MM/YYYY or Present">
+                    </div>
+                </div>
+            </div>
+        `,
+        'skills-list': `
+            <div class="entry">
+                <div class="entry-grid">
+                    <div class="form-group w-60">
+                        <label>Skill Category <span class="asterisk">*</span></label>
+                        <input type="text" class="skill-category" required placeholder="e.g., Programming Languages, Tools, Soft Skills">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Skills <span class="asterisk">*</span></label>
+                        <textarea class="skills" rows="2" required placeholder="List skills separated by commas"></textarea>
+                    </div>
+                </div>
+            </div>
+        `,
+        'languages-list': `
+            <div class="entry">
+                <div class="entry-grid">
+                    <div class="form-group w-50">
+                        <label>Language <span class="asterisk">*</span></label>
+                        <input type="text" class="language" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label>Proficiency <span class="asterisk">*</span></label>
+                        <select class="proficiency" required>
+                            <option value="">Select Proficiency</option>
+                            <option value="Native">Native</option>
+                            <option value="Fluent">Fluent</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Basic">Basic</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        `,
+        'certifications-list': `
+            <div class="entry">
+                <div class="entry-grid">
+                    <div class="form-group w-60">
+                        <label>Certificate Name <span class="asterisk">*</span></label>
+                        <input type="text" class="certificate-name" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label>Issuing Organization <span class="asterisk">*</span></label>
+                        <input type="text" class="issuing-organization" required>
+                    </div>
+                    <div class="form-group w-40">
+                        <label>Date Obtained</label>
+                        <input type="text" class="date-obtained" placeholder="MM/YYYY">
+                    </div>
+                </div>
+            </div>
+        `,
+        'projects-list': `
+            <div class="entry">
+                <div class="entry-grid">
+                    <div class="form-group w-60">
+                        <label>Project Name <span class="asterisk">*</span></label>
+                        <input type="text" class="project-name" required>
+                    </div>
+                    <div class="form-group w-50">
+                        <label>Technologies Used</label>
+                        <input type="text" class="technologies" placeholder="e.g., React, Node.js, MongoDB">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description <span class="asterisk">*</span></label>
+                        <textarea class="description" rows="3" required placeholder="Describe your project, its purpose, and your role"></textarea>
+                    </div>
+                </div>
+            </div>
+        `
+    };
+
+    // Create a temporary container to parse the HTML
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = templateMap[listId].trim();
     
-    // Add delete button (if not a required field)
-    addDeleteButton(entry, listId);
-    
-    return entry;
+    // Return the first child (the entry div)
+    return tempContainer.firstChild;
 }
 
 // Check if form has required fields filled
